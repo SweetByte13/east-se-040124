@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import ipdb
+from models.pet import Pet
 
 class Owner:
     def __init__(self, name, age, experience=0):
@@ -27,3 +29,10 @@ class Owner:
             self._age = new_age
         else:
             raise TypeError('Age must be an integer')
+        
+    @property    
+    def pets(self):
+        return [pet for pet in Pet.all if pet.owner == self]
+        
+    def __reper__(self):
+        return f'<Owner name={self.name}>'
