@@ -4,23 +4,26 @@ from sqlalchemy_serializer import SerializerMixin
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules = ('-created_at', '-updated_at',)
+    serialize_rules = ('-created_at', '-updated_at','-_password_hash',)
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False)
-    # 2a. create _password_hash column type string
-
+    username = db.Column(db.String, nullable=False) #add unique constraint!
+    _password_hash = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    # 2b. define property to get _password_hash
+    @property
+    def password_hash(self):
+        return self._password_hash
 
-    # 2c. define property setter to set _password_hash
-        # DO NOT want plain text passwords in the database!
 
-    # 2d. create User instances in flask shell
+    @password_hash.setter
+    def password_hash(self, password):
+        self._password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    # 6b. Create an authenticate method that uses bcyrpt to verify the password against the hash in the DB with bcrypt.check_password_hash
+    
+def authenticate(self, password):
+    bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User id={self.id} username={self.username} >'

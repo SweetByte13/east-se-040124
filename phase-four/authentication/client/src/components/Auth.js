@@ -21,7 +21,7 @@ function Auth({ setUser }) {
     }
 
     const handleSubmit = (values) => {
-        const endpoint = signup ? '/users' : '/login'
+        const endpoint = signup ? '/signup' : '/login'
         fetch(endpoint, {
             method: 'POST',
             headers: {

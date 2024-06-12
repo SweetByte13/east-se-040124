@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from sqlalchemy import MetaData
 from flask_restful import Api
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s"
@@ -25,7 +26,9 @@ api = Api(app)
 CORS(app)
 
 # 1. instantiate Bcrypt for password hashing
+bcrypt = Bcrypt(app)
 
 # 3b. Session Set up:
 # generate a secrete key `python -c 'import os; print(os.urandom(16))'`
 # configure secret key with flask app
+app.secret_key = b'L\xe9\xcb?\x8dL\x806X\x82-\xa0(7$f'
