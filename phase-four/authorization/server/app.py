@@ -90,4 +90,9 @@ class Login(Resource):
 
 api.add_resource(Login, '/login')
 
-# 6c. add user_id to session
+@app.before_request
+def check_authorized():
+    if (request.endpoint == 'checksession' or request.endpoint == 'projectbyid' or \ 
+            (request.endpoint == 'projects' and request.method == 'POST'))\
+            and not session.get('user_id'):
+        return make_response({'error': 'Unauthorized: Must login'}, 401)
